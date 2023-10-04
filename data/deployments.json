@@ -1,5 +1,15 @@
 {
   "baseGoerli": {
-    "Vault": "0xaB1E8868FEe285cF5F379aCF61ae4D65211fc6FE"
+    "Vault": "0xaB1E8868FEe285cF5F379aCF61ae4D65211fc6FE",
+    "USDG": "0xba3FeA4Fe91de455164Fb9979B834ce4E11f274b",
+    "Router": "0x94265f90728993A3f7089049045ceef566A36bB9",
+    "VaultPriceFeed": "0x3A9f10922eEb266f41551641140CF01B461D155c",
+    "FastPriceFeed": "",
+    "GLP": "0x688487605ebD93332756a69059324C12c1Ef5e3C",
+    "ShortsTracker": "0x49a3A5cf91DE1b78c43Dc1adD03E8A71f1Ea2e30",
+    "ShortsTrackerTimelock": "",
+    "GLPManager": "0x05339f09375f2E74032617d4e44bd192ce596eCb",
+    "ErrorController": "0xF74235f7Fd9eeFF44A78463fe72EA1B12C74EA92",
+    "VaultUtils": "0x6b818C5D9104BaEC4c1C1Df599527B35bcBB2520"
   }
 }
