@@ -86,7 +86,7 @@ contract Vault is ReentrancyGuard, IVault {
 
     mapping (address => bool) public override whitelistedTokens;
     mapping (address => uint256) public override tokenDecimals;
-    mapping (address => uint256) public override minProfitBasisPoints;
+    mapping (address => uint256) public override minProfitBasisPoints;  // Per token config
     mapping (address => bool) public override stableTokens;
     mapping (address => bool) public override shortableTokens;
 
