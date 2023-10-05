@@ -3,7 +3,7 @@ const { expandDecimals } = require('../../test/shared/utilities');
 const { toUsd } = require('../../test/shared/units');
 const { errors } = require('../../test/core/Vault/helpers');
 
-const network = process.env.HARDHAT_NETWORK || 'mainnet';
+const network = process.env.HARDHAT_NETWORK || 'base';
 const tokens = require('./tokens')[network];
 
 const VAULT_BASE_GOERLI = '0xaB1E8868FEe285cF5F379aCF61ae4D65211fc6FE';
@@ -86,6 +86,16 @@ async function main() {
   // @note DONE - await sendTxn(vault.setInManagerMode(true), 'vault.setInManagerMode');
   // @note DONE - await sendTxn(vault.setManager(GLP_MANAGER, true), 'vault.setManager');
   //
+  // See setVaultConfig.js values used here
+  // 10, // taxBasisPoints,
+  // 10, // stableTaxBasisPoints,
+  // 10, // mintBurnFeeBasisPoints,
+  // 10, // swapFeeBasisPoints,
+  // 10, // stableSwapFeeBasisPoints,
+  // 10, // marginFeeBasisPoints,
+  // expandDecimals(1, 30), // 1 USD, liquidationFeeUsd,
+  // 3600, // 1 hour, minProfitTime,
+  // true // hasDynamicFees
   // @note DONE - await sendTxn(
   //   vault.setFees(
   //     10, // _taxBasisPoints
@@ -95,7 +105,7 @@ async function main() {
   //     1, // _stableSwapFeeBasisPoints
   //     10, // _marginFeeBasisPoints
   //     toUsd(2), // _liquidationFeeUsd
-  //     24 * 60 * 60, // _minProfitTime
+  //     24 * 60 * 60, // _minProfitTime // TODO: Too high. See setVaultConfig.js
   //     true // _hasDynamicFees
   //   ),
   //   'vault.setFees'
