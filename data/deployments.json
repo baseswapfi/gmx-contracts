@@ -10,6 +10,8 @@
     "ShortsTrackerTimelock": "",
     "GLPManager": "0x05339f09375f2E74032617d4e44bd192ce596eCb",
     "ErrorController": "0xF74235f7Fd9eeFF44A78463fe72EA1B12C74EA92",
-    "VaultUtils": "0x6b818C5D9104BaEC4c1C1Df599527B35bcBB2520"
+    "VaultUtils": "0x6b818C5D9104BaEC4c1C1Df599527B35bcBB2520",
+
+    "GMX": "0x7CF2797a52EcaF8a4a24D9ABe0B22eeDC813e728"
   }
 }

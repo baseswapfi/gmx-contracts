@@ -2,10 +2,9 @@ const { ethers } = require('hardhat');
 const { deployContract, contractAt, sendTxn } = require('../shared/helpers');
 const { expandDecimals } = require('../../test/shared/utilities');
 const { getChainAddresses } = require('../addresses');
+const { SYMBOL } = require('../constants');
 const network = process.env.HARDHAT_NETWORK || 'base';
 const tokens = require('./tokens')[network];
-
-const SYMBOL = 'DNK';
 
 async function main() {
   const signer = (await ethers.getSigners())[0];

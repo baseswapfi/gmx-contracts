@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const parse = require('csv-parse');
 const dotenv = require('dotenv');
+const { ethers } = require('hardhat');
 dotenv.config();
 
 const network = process.env.HARDHAT_NETWORK || 'mainnet';
@@ -27,6 +28,10 @@ const signers = {
   base: new ethers.Wallet(DEPLOY_KEY).connect(providers.base),
   base_goerli: new ethers.Wallet(DEPLOY_KEY).connect(providers.base_goerli),
 };
+
+async function getSigner() {
+  return (await ethers.getSigners())[0];
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -202,4 +207,5 @@ module.exports = {
   processBatch,
   updateTokensPerInterval,
   sleep,
+  getSigner,
 };
