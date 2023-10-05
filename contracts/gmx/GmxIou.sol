@@ -10,7 +10,7 @@ import "./interfaces/IGmxIou.sol";
 contract GmxIou is IERC20, IGmxIou {
     using SafeMath for uint256;
 
-    mapping (address => uint256) private _balances;
+    mapping(address => uint256) private _balances;
     uint256 public override totalSupply;
 
     string public name;
@@ -19,7 +19,7 @@ contract GmxIou is IERC20, IGmxIou {
 
     address public minter;
 
-    constructor (address _minter, string memory _name, string memory _symbol) public {
+    constructor(address _minter, string memory _name, string memory _symbol) public {
         name = _name;
         symbol = _symbol;
         minter = _minter;
@@ -52,7 +52,11 @@ contract GmxIou is IERC20, IGmxIou {
     }
 
     // empty implementation, GmxIou tokens are non-transferrable
-    function transferFrom(address /* sender */, address /* recipient */, uint256 /* amount */) public virtual override returns (bool) {
+    function transferFrom(
+        address /* sender */,
+        address /* recipient */,
+        uint256 /* amount */
+    ) public virtual override returns (bool) {
         revert("GmxIou: non-transferrable");
     }
 

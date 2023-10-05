@@ -26,23 +26,23 @@ contract GmxMigrator is ReentrancyGuard, IGmxMigrator {
     address public admin;
 
     address[] public signers;
-    mapping (address => bool) public isSigner;
-    mapping (bytes32 => bool) public pendingActions;
-    mapping (address => mapping (bytes32 => bool)) public signedActions;
+    mapping(address => bool) public isSigner;
+    mapping(bytes32 => bool) public pendingActions;
+    mapping(address => mapping(bytes32 => bool)) public signedActions;
 
-    mapping (address => bool) public whitelistedTokens;
-    mapping (address => address) public override iouTokens;
-    mapping (address => uint256) public prices;
-    mapping (address => uint256) public caps;
+    mapping(address => bool) public whitelistedTokens;
+    mapping(address => address) public override iouTokens;
+    mapping(address => uint256) public prices;
+    mapping(address => uint256) public caps;
 
-    mapping (address => bool) public lpTokens;
-    mapping (address => address) public lpTokenAs;
-    mapping (address => address) public lpTokenBs;
+    mapping(address => bool) public lpTokens;
+    mapping(address => address) public lpTokenAs;
+    mapping(address => address) public lpTokenBs;
 
-    mapping (address => uint256) public tokenAmounts;
+    mapping(address => uint256) public tokenAmounts;
 
-    mapping (address => mapping (address => uint256)) public migratedAmounts;
-    mapping (address => mapping (address => uint256)) public maxMigrationAmounts;
+    mapping(address => mapping(address => uint256)) public migratedAmounts;
+    mapping(address => mapping(address => uint256)) public maxMigrationAmounts;
 
     event SignalApprove(address token, address spender, uint256 amount, bytes32 action, uint256 nonce);
 
@@ -123,17 +123,17 @@ contract GmxMigrator is ReentrancyGuard, IGmxMigrator {
         maxMigrationAmounts[_account][_token] = _maxMigrationAmount;
     }
 
-    function migrate(
-        address _token,
-        uint256 _tokenAmount
-    ) public nonReentrant {
+    function migrate(address _token, uint256 _tokenAmount) public nonReentrant {
         require(isMigrationActive, "GmxMigrator: migration is no longer active");
         require(whitelistedTokens[_token], "GmxMigrator: token not whitelisted");
         require(_tokenAmount > 0, "GmxMigrator: invalid tokenAmount");
 
         if (hasMaxMigrationLimit) {
             migratedAmounts[msg.sender][_token] = migratedAmounts[msg.sender][_token].add(_tokenAmount);
-            require(migratedAmounts[msg.sender][_token] <= maxMigrationAmounts[msg.sender][_token], "GmxMigrator: maxMigrationAmount exceeded");
+            require(
+                migratedAmounts[msg.sender][_token] <= maxMigrationAmounts[msg.sender][_token],
+                "GmxMigrator: maxMigrationAmount exceeded"
+            );
         }
 
         uint256 tokenPrice = getTokenPrice(_token);
@@ -167,7 +167,12 @@ contract GmxMigrator is ReentrancyGuard, IGmxMigrator {
         emit SignalApprove(_token, _spender, _amount, action, nonce);
     }
 
-    function signApprove(address _token, address _spender, uint256 _amount, uint256 _nonce) external nonReentrant onlySigner {
+    function signApprove(
+        address _token,
+        address _spender,
+        uint256 _amount,
+        uint256 _nonce
+    ) external nonReentrant onlySigner {
         bytes32 action = keccak256(abi.encodePacked("approve", _token, _spender, _amount, _nonce));
         _validateAction(action);
         require(!signedActions[msg.sender][action], "GmxMigrator: already signed");
@@ -175,7 +180,12 @@ contract GmxMigrator is ReentrancyGuard, IGmxMigrator {
         emit SignAction(action, _nonce);
     }
 
-    function approve(address _token, address _spender, uint256 _amount, uint256 _nonce) external nonReentrant onlyAdmin {
+    function approve(
+        address _token,
+        address _spender,
+        uint256 _amount,
+        uint256 _nonce
+    ) external nonReentrant onlyAdmin {
         bytes32 action = keccak256(abi.encodePacked("approve", _token, _spender, _amount, _nonce));
         _validateAction(action);
         _validateAuthorization(action);
