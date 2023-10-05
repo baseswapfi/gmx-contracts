@@ -7,7 +7,7 @@ module.exports = {
       name: 'btc',
       address: '',
       decimals: 8,
-      priceFeed: '',
+      priceFeed: '0x916a04c8B7FB4ca03b06C00499c8e2fba6AD8Ae4',
       priceDecimals: 8,
       fastPricePrecision: 1000,
       maxCumulativeDeltaDiff: 0.1 * 10 * 1000 * 1000, // 10%
@@ -33,9 +33,9 @@ module.exports = {
     },
     eth: {
       name: 'eth',
-      address: '',
+      address: '0x4200000000000000000000000000000000000006',
       decimals: 18,
-      priceFeed: '',
+      priceFeed: '0x40c164a5c5022f25Ec41Bb96F6fAc14b15Ce99c1',
       priceDecimals: 8,
       fastPricePrecision: 1000,
       maxCumulativeDeltaDiff: 0.1 * 10 * 1000 * 1000, // 10%
@@ -61,9 +61,9 @@ module.exports = {
     },
     usdc: {
       name: 'usdc',
-      address: '',
+      address: '0x7b4Adf64B0d60fF97D672E473420203D52562A84',
       decimals: 6,
-      priceFeed: '',
+      priceFeed: '0xCB3026f0a031b99be7fDb1c0DF06bc62065937e2',
       priceDecimals: 8,
       isStrictStable: true,
       tokenWeight: 12000,
@@ -75,9 +75,9 @@ module.exports = {
     },
     link: {
       name: 'link',
-      address: '',
+      address: '0x6D0F8D488B669aa9BA2D0f0b7B75a88bf5051CD3',
       decimals: 18,
-      priceFeed: '',
+      priceFeed: '0x07553A2E16d7c2b7C8DBE1da206Bf65f32BCdf4F',
       priceDecimals: 8,
       fastPricePrecision: 1000,
       maxCumulativeDeltaDiff: 0.1 * 10 * 1000 * 1000, // 10%
@@ -101,6 +101,20 @@ module.exports = {
       maxLiquidityThresholdShort: 250 * 1000,
       minLiquidityThresholdLong: 50 * 1000,
       minLiquidityThresholdShort: 50 * 1000,
+    },
+    dai: {
+      name: 'dai',
+      address: '',
+      decimals: 18,
+      priceFeed: '0x9fB350158A769997729592223aa37B5e7cA4De6d',
+      priceDecimals: 8,
+      isStrictStable: true,
+      tokenWeight: 3000,
+      minProfitBps: 0,
+      maxUsdgAmount: 22 * 1000 * 1000,
+      bufferAmount: 5 * 1000 * 1000,
+      isStable: true,
+      isShortable: false,
     },
     nativeToken: {
       name: 'weth',

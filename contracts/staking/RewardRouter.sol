@@ -87,7 +87,10 @@ contract RewardRouter is ReentrancyGuard, Governable {
         IERC20(_token).safeTransfer(_account, _amount);
     }
 
-    function batchStakeGmxForAccount(address[] memory _accounts, uint256[] memory _amounts) external nonReentrant onlyGov {
+    function batchStakeGmxForAccount(
+        address[] memory _accounts,
+        uint256[] memory _amounts
+    ) external nonReentrant onlyGov {
         address _gmx = gmx;
         for (uint256 i = 0; i < _accounts.length; i++) {
             _stakeGmx(msg.sender, _accounts[i], _gmx, _amounts[i]);
@@ -114,11 +117,23 @@ contract RewardRouter is ReentrancyGuard, Governable {
         _unstakeGmx(msg.sender, esGmx, _amount);
     }
 
-    function mintAndStakeGlp(address _token, uint256 _amount, uint256 _minUsdg, uint256 _minGlp) external nonReentrant returns (uint256) {
+    function mintAndStakeGlp(
+        address _token,
+        uint256 _amount,
+        uint256 _minUsdg,
+        uint256 _minGlp
+    ) external nonReentrant returns (uint256) {
         require(_amount > 0, "RewardRouter: invalid _amount");
 
         address account = msg.sender;
-        uint256 glpAmount = IGlpManager(glpManager).addLiquidityForAccount(account, account, _token, _amount, _minUsdg, _minGlp);
+        uint256 glpAmount = IGlpManager(glpManager).addLiquidityForAccount(
+            account,
+            account,
+            _token,
+            _amount,
+            _minUsdg,
+            _minGlp
+        );
         IRewardTracker(feeGlpTracker).stakeForAccount(account, account, glp, glpAmount);
         IRewardTracker(stakedGlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
 
@@ -130,11 +145,18 @@ contract RewardRouter is ReentrancyGuard, Governable {
     function mintAndStakeGlpETH(uint256 _minUsdg, uint256 _minGlp) external payable nonReentrant returns (uint256) {
         require(msg.value > 0, "RewardRouter: invalid msg.value");
 
-        IWETH(weth).deposit{value: msg.value}();
+        IWETH(weth).deposit{ value: msg.value }();
         IERC20(weth).approve(glpManager, msg.value);
 
         address account = msg.sender;
-        uint256 glpAmount = IGlpManager(glpManager).addLiquidityForAccount(address(this), account, weth, msg.value, _minUsdg, _minGlp);
+        uint256 glpAmount = IGlpManager(glpManager).addLiquidityForAccount(
+            address(this),
+            account,
+            weth,
+            msg.value,
+            _minUsdg,
+            _minGlp
+        );
 
         IRewardTracker(feeGlpTracker).stakeForAccount(account, account, glp, glpAmount);
         IRewardTracker(stakedGlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
@@ -144,26 +166,47 @@ contract RewardRouter is ReentrancyGuard, Governable {
         return glpAmount;
     }
 
-    function unstakeAndRedeemGlp(address _tokenOut, uint256 _glpAmount, uint256 _minOut, address _receiver) external nonReentrant returns (uint256) {
+    function unstakeAndRedeemGlp(
+        address _tokenOut,
+        uint256 _glpAmount,
+        uint256 _minOut,
+        address _receiver
+    ) external nonReentrant returns (uint256) {
         require(_glpAmount > 0, "RewardRouter: invalid _glpAmount");
 
         address account = msg.sender;
         IRewardTracker(stakedGlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
         IRewardTracker(feeGlpTracker).unstakeForAccount(account, glp, _glpAmount, account);
-        uint256 amountOut = IGlpManager(glpManager).removeLiquidityForAccount(account, _tokenOut, _glpAmount, _minOut, _receiver);
+        uint256 amountOut = IGlpManager(glpManager).removeLiquidityForAccount(
+            account,
+            _tokenOut,
+            _glpAmount,
+            _minOut,
+            _receiver
+        );
 
         emit UnstakeGlp(account, _glpAmount);
 
         return amountOut;
     }
 
-    function unstakeAndRedeemGlpETH(uint256 _glpAmount, uint256 _minOut, address payable _receiver) external nonReentrant returns (uint256) {
+    function unstakeAndRedeemGlpETH(
+        uint256 _glpAmount,
+        uint256 _minOut,
+        address payable _receiver
+    ) external nonReentrant returns (uint256) {
         require(_glpAmount > 0, "RewardRouter: invalid _glpAmount");
 
         address account = msg.sender;
         IRewardTracker(stakedGlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
         IRewardTracker(feeGlpTracker).unstakeForAccount(account, glp, _glpAmount, account);
-        uint256 amountOut = IGlpManager(glpManager).removeLiquidityForAccount(account, weth, _glpAmount, _minOut, address(this));
+        uint256 amountOut = IGlpManager(glpManager).removeLiquidityForAccount(
+            account,
+            weth,
+            _glpAmount,
+            _minOut,
+            address(this)
+        );
 
         IWETH(weth).withdraw(amountOut);
 
