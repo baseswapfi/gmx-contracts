@@ -52,6 +52,16 @@ const config = {
     apiKey: {
       base: process.env.BASE_SCAN_API_KEY,
     },
+    customChains: [
+      {
+        network: 'base',
+        chainId: 8453,
+        urls: {
+          apiURL: 'https://api.basescan.org',
+          browserURL: 'https://basescan.org',
+        },
+      },
+    ],
   },
 };
 
