@@ -129,10 +129,17 @@ async function saveFeeReference({ feeValues, referralValues, refTimestamp }) {
 
   let feesForGmx = feesForGmxAndGlp.arbitrum.add(feesForGmxAndGlp.avax).sub(glpFees.arbitrum).sub(glpFees.avax)
   const v2FeesForTreasury = {
-    arbitrum: values.arbitrum.feesUsdV2.mul(10).div(37),
-    avax: values.avax.feesUsdV2.mul(10).div(37)
+    arbitrum: values.arbitrum.feesUsdV2.mul(88).div(370),
+    avax: values.avax.feesUsdV2.mul(88).div(370)
   }
-  const v2FeesForGmx = (values.arbitrum.feesUsdV2.add(values.avax.feesUsdV2)).sub(v2FeesForTreasury.arbitrum.add(v2FeesForTreasury.avax))
+  const v2FeesForChainlink = {
+    arbitrum: values.arbitrum.feesUsdV2.mul(12).div(370),
+    avax: values.avax.feesUsdV2.mul(12).div(370)
+  }
+  const v2FeesForGmx = (values.arbitrum.feesUsdV2.add(values.avax.feesUsdV2))
+    .sub(v2FeesForTreasury.arbitrum.add(v2FeesForTreasury.avax))
+    .sub(v2FeesForChainlink.arbitrum.add(v2FeesForChainlink.avax))
+
   feesForGmx = feesForGmx.add(v2FeesForGmx)
 
   const gmxFees = {
@@ -145,6 +152,8 @@ async function saveFeeReference({ feeValues, referralValues, refTimestamp }) {
     .add(referralValues.avax.allAffiliateUsd)
     .add(referralValues.avax.allDiscountUsd)
     .add(keeperCostsAvaxUsd)
+    .add(v2FeesForTreasury.avax)
+    .add(v2FeesForChainlink.avax)
 
   const requiredWavaxBalance = requiredWavaxUsd.mul(expandDecimals(1, 18)).div(values.avax.nativeTokenPrice)
 
@@ -159,6 +168,10 @@ async function saveFeeReference({ feeValues, referralValues, refTimestamp }) {
       arbitrum: v2FeesForTreasury.arbitrum.mul(expandDecimals(1, 18)).div(values.arbitrum.nativeTokenPrice).toString(),
       avax: v2FeesForTreasury.avax.mul(expandDecimals(1, 18)).div(values.avax.nativeTokenPrice).toString()
     },
+    chainlinkFees: {
+      arbitrum: v2FeesForChainlink.arbitrum.mul(expandDecimals(1, 18)).div(values.arbitrum.nativeTokenPrice).toString(),
+      avax: v2FeesForChainlink.avax.mul(expandDecimals(1, 18)).div(values.avax.nativeTokenPrice).toString(),
+    },
     gmxFees: {
       arbitrum: gmxFees.arbitrum.mul(expandDecimals(1, 18)).div(values.arbitrum.nativeTokenPrice).toString(),
       avax: gmxFees.avax.mul(expandDecimals(1, 18)).div(values.avax.nativeTokenPrice).toString(),
@@ -171,6 +184,10 @@ async function saveFeeReference({ feeValues, referralValues, refTimestamp }) {
       arbitrum: values.arbitrum.nativeTokenPrice.toString(),
       avax: values.avax.nativeTokenPrice.toString(),
     },
+    referralRewards: {
+      arbitrum: (referralValues.arbitrum.allDiscountUsd.add(referralValues.avax.allDiscountUsd)).mul(expandDecimals(1, 18)).div(values.arbitrum.nativeTokenPrice).toString(),
+      avax: (referralValues.avax.allDiscountUsd.add(referralValues.avax.allDiscountUsd)).mul(expandDecimals(1, 18)).div(values.avax.nativeTokenPrice).toString()
+    },
     gmxPrice: values.gmxPrice.toString(),
     traderRebates: referralValues.arbitrum.allDiscountUsd.add(referralValues.avax.allDiscountUsd).toString(),
     affiliateRewards: referralValues.arbitrum.allAffiliateUsd.add(referralValues.avax.allAffiliateUsd).toString(),
@@ -178,6 +195,18 @@ async function saveFeeReference({ feeValues, referralValues, refTimestamp }) {
   }
 
   console.info("data", data)
+
+  console.info(`ETH price: $${formatAmount(data.nativeTokenPrice.arbitrum, 30, 2, true)}`)
+  console.info(`AVAX price: $${formatAmount(data.nativeTokenPrice.avax, 30, 2, true)}`)
+
+  console.info(`v2 claimable fees arbitrum (excluding lp fees): ${formatAmount(values.arbitrum.feesUsdV2, 30, 2, true)} USD`)
+  console.info(`v2 claimable fees avax (excluding lp fees): ${formatAmount(values.avax.feesUsdV2, 30, 2, true)} USD`)
+
+  console.info(`treasury fees arbitrum: ${formatAmount(v2FeesForTreasury.arbitrum, 30, 2, true)} USD, ${formatAmount(data.treasuryFees.arbitrum, 18, 2, true)} ETH`)
+  console.info(`treasury fees avax: ${formatAmount(v2FeesForTreasury.avax, 30, 2, true)} USD, ${formatAmount(data.treasuryFees.avax, 18, 2, true)} AVAX`)
+
+  console.info(`chainlink fees arbitrum: ${formatAmount(v2FeesForChainlink.arbitrum, 30, 2, true)} USD, ${formatAmount(data.chainlinkFees.arbitrum, 18, 2, true)} ETH`)
+  console.info(`chainlink fees avax: ${formatAmount(v2FeesForChainlink.avax, 30, 2, true)} USD, ${formatAmount(data.chainlinkFees.avax, 18, 2, true)} AVAX`)
 
   const filename = `./fee-reference.json`
   fs.writeFileSync(filename, JSON.stringify(data, null, 4))
