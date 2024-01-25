@@ -6,7 +6,6 @@ const ADDRESSES = {
     VAULT_PRICE_FEED: '',
     FAST_PRICE_EVENTS: '',
     FAST_PRICE_FEED: '',
-    FAST_PRICE_FEED: '',
     GLP_ADDRESS: '',
     GLP_MANAGER: '',
     SHORTS_TRACKER: '',
