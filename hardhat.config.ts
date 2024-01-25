@@ -36,12 +36,22 @@ const config = {
       // gas: 500000,
       // gasPrice: 100,
     },
-    base_goerli: {
+    baseGoerli: {
       url: process.env.BASE_GOERLI_RPC,
       accounts,
       chainId: 84531,
       // gas: 500000,
       // gasPrice: 100,
+    },
+    // fraxtal: {
+    //   url: process.env.FRAXTAL_RPC,
+    //   accounts,
+    //   chainId: 252,
+    // },
+    fraxtalTestnet: {
+      url: process.env.FRAXTAL_TESTNET_RPC,
+      accounts,
+      chainId: 2522,
     },
   },
   typechain: {
